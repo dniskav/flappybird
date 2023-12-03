@@ -1,5 +1,5 @@
 import board from "./board.js";
-import { full_pipe, bird } from "./pieces.js";
+import { full_pipe, floor } from "./pieces.js";
 
 // bind the DOM elements
 const canvas =  document.querySelector('#canvas');
@@ -11,6 +11,7 @@ const BOARD_HEIGHT = 120;
 const BLOCK_SIZE = 5;
 const PIPE_SEPARATION = 40;
 const BG = new Image();
+const FLOOR = new Image();
 const FLYING_GAP = 20;
 const INCREASE_VELOCITY_FACTOR = 1.2;
 
@@ -27,6 +28,7 @@ let bg = {
 };
 
 BG.src = '../assets/bg.png';
+FLOOR.src = '../assets/floor.png';
 
 canvas.width = BOARD_WIDTH * BLOCK_SIZE;
 canvas.height = BOARD_HEIGHT * BLOCK_SIZE;
@@ -42,6 +44,8 @@ function put_pipe() {
   // set a randon position
   elements_to_render.push(pipesCol1);
   elements_to_render.push(pipesCol2);
+  elements_to_render.push(floor);
+  // elements_to_render.push(floor);
 }
 
 // game loop
@@ -76,14 +80,31 @@ function draw() {
   context.drawImage(BG, 0, 0, 75, 120);
 
   elements_to_render.forEach(element => {
-    element.shape.forEach((row, y) => {
-      row.forEach((col, x) => {
-        if(col === 1) {
-          context.fillStyle = 'green';
-          context.fillRect(x + element.position.x, y + element.position.y, 1, 1);
-        }
-      })
-    })
+    switch(element.kind) {
+      case 'pipe':
+        element.shape.forEach((row, y) => {
+          row.forEach((col, x) => {
+            if(col === 1) {
+              context.fillStyle = 'green';
+              context.fillRect(x + element.position.x, y + element.position.y, 1, 1);
+            }
+          })
+        })
+      break;
+      case 'box':
+        element.shape.forEach((row, y) => {
+          row.forEach((col, x) => {
+            if(col === 1) {
+              context.fillStyle = 'yellow';
+              context.strokeStyle = 'black';
+              context.fillRect(x + element.position.x, y + element.position.y, 1, 1);
+            }
+          })
+        })
+        context.drawImage(FLOOR, 0, 0, 580, 164, 0, 97, 75, 23);
+      break;
+    }
+
   });
 
   board.forEach((row, y) => {

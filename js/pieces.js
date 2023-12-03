@@ -35,11 +35,12 @@ export const bird = {
   ]
 }
 
-export class piece {
-  constructor(position = { x: 0, y: 0}, shape = [[]]) {
+export class Piece {
+  constructor(position = { x: 0, y: 0}, shape = [[]], kind = 'pipe') {
     this.position = position;
     this.start_position = {...position};
     this.shape = shape;
+    this.kind = kind;
   }
 
   position = {
@@ -61,8 +62,8 @@ export class full_pipe {
     this.position = { x: board_width, y: 0};
     this.start_position = {...this.position };
     this.kind = kind;
-    this.pipe_top = new piece({ x: board_width, y: 0 }, this.pipeBody.concat(shape_pipe_top));
-    this.pipe_bottom = new piece({ x: board_width, y: 0 }, shape_pipe_bottom.concat(this.pipeBody));
+    this.pipe_top = new Piece({ x: board_width, y: 0 }, this.pipeBody.concat(shape_pipe_top));
+    this.pipe_bottom = new Piece({ x: board_width, y: 0 }, shape_pipe_bottom.concat(this.pipeBody));
     this.shape = this.pipe_top.shape.concat(this.generate_gap(), this.pipe_bottom.shape);
     this.position.x = board_width;
     this.reset_position(true);
@@ -82,3 +83,5 @@ export class full_pipe {
     return new Array(this.flying_gap).fill(new Array(this.pipe_top.shape[0].length).fill(0));
   }
 }
+export const floor = new Piece({ x: 0, y: 97 }, new Array(23).fill(new Array(75).fill(1)), 'box');
+

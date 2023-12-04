@@ -1,3 +1,21 @@
+export class Piece {
+  constructor(position = { x: 0, y: 0}, shape = [[]], kind = 'pipe', img = null) {
+    this.position = position;
+    this.start_position = {...position};
+    this.shape = shape;
+    this.kind = kind;
+    this.img = img;
+  }
+
+  position = {
+    x: 0,
+    y: 0,
+  };
+
+  shape = [
+  ];
+}
+
 export const shape_pipe_top = [
     [0,1,1,1,1,1,1,1,1,1,1,0],
     [1,1,1,1,1,1,1,1,1,1,1,1],
@@ -14,43 +32,15 @@ export const shape_pipe_bottom = [
     [0,1,1,1,1,1,1,1,1,1,1,0],
   ];
 
-export const bird = {
-  position: {
-    x: 0,
-    y: 0,
-  },
-  shape: [
-    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-  ]
-}
-
-export class Piece {
-  constructor(position = { x: 0, y: 0}, shape = [[]], kind = 'pipe') {
-    this.position = position;
-    this.start_position = {...position};
-    this.shape = shape;
-    this.kind = kind;
-  }
-
-  position = {
-    x: 0,
-    y: 0,
-  };
-
-  shape = [
+export const bird_shape = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,0,0,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1],
   ];
-}
 
 export class full_pipe {
   constructor(board_width, board_heigth, flying_gap, startXPosition = 0, kind = 'pipe'){
@@ -74,6 +64,13 @@ export class full_pipe {
     y: 0,
   }
 
+  action() {
+    this.position.x--;
+    if (this.position.x + this.shape[0].length < 0) {
+      this.reset_position();
+    }
+  }
+
   reset_position(initial = false) {
     this.position.x = initial ? this.board_width + this.startXPosition : this.board_width;
     this.position.y = ((Math.floor(Math.random() * 10) * 10) % this.board_heigth - 5) - this.pipe_top.shape.length + 5;
@@ -83,5 +80,5 @@ export class full_pipe {
     return new Array(this.flying_gap).fill(new Array(this.pipe_top.shape[0].length).fill(0));
   }
 }
-export const floor = new Piece({ x: 0, y: 97 }, new Array(23).fill(new Array(75).fill(1)), 'box');
+
 
